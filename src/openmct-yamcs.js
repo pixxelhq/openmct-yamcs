@@ -27,6 +27,7 @@ import YamcsStalenessProvider from './providers/staleness-provider.js';
 import LimitProvider from './providers/limit-provider.js';
 import EventLimitProvider from './providers/event-limit-provider.js';
 import UserProvider from './providers/user/user-provider.js';
+import AuthProvider from './providers/auth.js';
 
 import { faultModelConvertor } from './providers/fault-mgmt-providers/utils.js';
 import YamcsFaultProvider from './providers/fault-mgmt-providers/yamcs-fault-provider.js';
@@ -41,6 +42,16 @@ import ExportToCSVActionPlugin from './actions/exportToCSV/plugin.js';
 export default function install(configuration) {
     return (openmct) => {
         openmct.install(openmct.plugins.ISOTimeFormat());
+        const authEnabled = configuration.yamcsAuthEnabled && configuration.yamcsAuthEnabled.toLowerCase() === 'true';
+
+        if (authEnabled){
+            const authProvider = new AuthProvider({
+                openmct,
+                authEndpoint: configuration.yamcsHistoricalEndpoint,
+                username: configuration.yamcsUsername,
+                password: configuration.yamcsPassword
+            });
+        }
 
         const latestTelemetryProvider = new LatestTelemetryProvider({
             url: configuration.yamcsHistoricalEndpoint,

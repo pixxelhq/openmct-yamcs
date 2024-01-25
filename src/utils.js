@@ -364,49 +364,6 @@ function flattenObjectArray(array, baseObj = {}) {
     }, baseObj);
 }
 
-async function getAccessToken(forceRefresh=false) {
-    const tokenUrl = "http://" + process.env.YAMCS_ENDPOINT + "/auth/token";
-    const params = new URLSearchParams();
-
-    const expiration_time = getCookie("expiration_time");
-
-    if (!forceRefresh && expiration_time != null && Date.now() > expiration_time) {
-        params.append("refresh_token", getCookie("refresh_token"));
-        params.append("grant_type", "refresh_token");
-
-    } else {
-        params.append("username", process.env.YAMCS_USERNAME);
-        params.append("password", process.env.YAMCS_PASSWORD);
-        params.append("grant_type", "password");
-    }
-
-    fetch(tokenUrl, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: params.toString(),
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`Failed to retrieve API token: ${response.status}`);
-        }
-
-        return response.json();
-    })
-    .then(data => {
-        const access_token = data.access_token;
-        const refresh_token = data.refresh_token;
-
-        const lastLoginTime = new Date(data.user.lastLoginTime).getTime();
-        const expires_in = parseInt(data.expires_in) * 1000;
-
-        document.cookie = `access_token=${access_token}; path=/; SameSite=Strict;`;
-        document.cookie = `refresh_token=${refresh_token}; path=/; SameSite=Strict;`;
-        document.cookie = `expiration_time=${lastLoginTime + expires_in}; path=/; SameSite=Strict;`;
-    });
-}
-
 function getCookie(name) {
     const cookies = document.cookie.split(';');
     for (const cookie of cookies) {
@@ -422,23 +379,24 @@ function getCookie(name) {
 async function customFetch(url, requestOptions = {}) {
     const access_token = getCookie('access_token');
 
-    // Extend the provided requestOptions object with headers
-    const headers = {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${access_token}`
-    };
+    if (access_token != null) {
+        // Extend the provided requestOptions object with headers
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${access_token}`
+        };
 
-    // Merge the headers with the provided requestOptions headers
-    requestOptions.headers = {
-        ...requestOptions.headers,
-        ...headers
-    };
+        // Merge the headers with the provided requestOptions headers
+        requestOptions.headers = {
+            ...requestOptions.headers,
+            ...headers
+        };
+    }
 
     const response = fetch(url, requestOptions)
                     .then(response => {
                         if (!response.ok) {
                             if (response.status === 401){
-                                getAccessToken(true);
                                 return customFetch(url, requestOptions);
                             }
                             else {
@@ -464,4 +422,5 @@ export {
     yieldResults,
     getLimitOverrides,
     customFetch,
+    getCookie
 };

@@ -8,7 +8,10 @@ const config = {
     "yamcsUserEndpoint": "http://localhost:9000/yamcs-proxy/api/user/",
     "yamcsInstance": process.env.YAMCS_INSTANCE,
     "yamcsProcessor": "realtime",
-    "yamcsFolder": process.env.YAMCS_FOLDER
+    "yamcsFolder": process.env.YAMCS_FOLDER,
+    "yamcsUsername": process.env.YAMCS_USERNAME,
+    "yamcsPassword": process.env.YAMCS_PASSWORD,
+    "yamcsAuthEnabled": process.env.YAMCS_AUTHENTICATION
 };
 const STATUS_STYLES = {
     "NO_STATUS": {
