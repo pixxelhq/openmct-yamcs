@@ -191,7 +191,7 @@ export default class YamcsObjectProvider {
 
     async #loadTelemetryDictionary() {
         const operation = 'parameters?details=yes';
-        const parameterUrl = this.url + 'api/mdb/' + this.instance + '/' + operation;
+        const parameterUrl = this.url + '/api/mdb/' + this.instance + '/' + operation;
         const url = this.#getMdbUrl('space-systems');
         const spaceSystems = await accumulateResults(url, {}, 'spaceSystems', []);
         const parameters = await accumulateResults(parameterUrl, {}, 'parameters', []);
@@ -206,7 +206,7 @@ export default class YamcsObjectProvider {
         });
 
         //get any limit overrides and subscribe for subsequent changes
-        let requestUrl = `${this.url}api/mdb-overrides/${this.instance}/${this.processor}`;
+        let requestUrl = `${this.url}/api/mdb-overrides/${this.instance}/${this.processor}`;
         this.limitOverrides = await getLimitOverrides(requestUrl);
         if (this.mdbChangesUnsubscribe === undefined) {
             this.mdbChangesUnsubscribe = this.realtimeTelemetryProvider.subscribeToMDBChanges(this.#updateParameterLimits.bind(this));
@@ -220,11 +220,11 @@ export default class YamcsObjectProvider {
     }
 
     #getMdbUrl(operation, name = '') {
-        return this.url + 'api/mdb/' + this.instance + '/' + operation + name;
+        return this.url + '/api/mdb/' + this.instance + '/' + operation + name;
     }
 
     async #fetchMdbApi(operation, property, abortSignal) {
-        const mdbURL = `${this.url}api/mdb/${this.instance}/${operation}`;
+        const mdbURL = `${this.url}/api/mdb/${this.instance}/${operation}`;
         const response = await accumulateResults(mdbURL, { signal: abortSignal }, property, []);
 
         return response;
