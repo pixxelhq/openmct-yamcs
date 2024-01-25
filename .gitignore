@@ -13,3 +13,6 @@ test-results
 # Misc
 .DS_Store
 .vscode/settings.json
+
+# ENV
+.env

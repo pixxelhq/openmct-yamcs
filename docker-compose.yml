@@ -1,0 +1,18 @@
+version: '3.3'
+
+services:
+  openmct-yamcs-example:
+    container_name: openmct-yamcs-example
+    build:
+      context: .
+      dockerfile: Dockerfile
+    expose:
+      - 9000
+    ports:
+      - "9000:9000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    env_file:
+      - .env
+    volumes:
+      - .:/home/node/app

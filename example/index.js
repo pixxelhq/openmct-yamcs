@@ -6,9 +6,9 @@ const config = {
     "yamcsHistoricalEndpoint": "http://localhost:9000/yamcs-proxy/",
     "yamcsWebsocketEndpoint": "ws://localhost:9000/yamcs-proxy-ws/",
     "yamcsUserEndpoint": "http://localhost:9000/yamcs-proxy/api/user/",
-    "yamcsInstance": "myproject",
+    "yamcsInstance": process.env.YAMCS_INSTANCE,
     "yamcsProcessor": "realtime",
-    "yamcsFolder": "myproject"
+    "yamcsFolder": process.env.YAMCS_FOLDER
 };
 const STATUS_STYLES = {
     "NO_STATUS": {
