@@ -1,14 +1,21 @@
-FROM node:20.11.0-slim
+FROM node:20.11.0-alpine
+
+RUN apk update && \
+    apk add --update git && \
+    apk add --update busybox-extras
+
+RUN mkdir /app && chown -R node:node /app
+WORKDIR /app
 
 USER node
-WORKDIR /home/node/app
 
 COPY --chown=node:node package*.json .
-
-RUN npm install --prefix /home/node/app --loglevel verbose
-
 COPY --chown=node:node . .
+
+# To make sure nasa/openmct is installed. Sometimes to cacheMiss, they might be skipped. No clue why
+RUN npm run --loglevel verbose build:example:master 
+RUN npm install --loglevel verbose
 
 EXPOSE 9000
 
-CMD ["npm", "start"]
+CMD ["npm", "run", "start:docker"]

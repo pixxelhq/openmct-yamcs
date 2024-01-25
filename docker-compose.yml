@@ -14,5 +14,6 @@ services:
       - "host.docker.internal:host-gateway"
     env_file:
       - .env
-    volumes:
-      - .:/home/node/app
+    # volumes:
+    #   - .:/app
+    #   - /app/node_modules

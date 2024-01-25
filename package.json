@@ -14,6 +14,7 @@
     "build:example:master": "npm install nasa/openmct#master --no-save",
     "postbuild:example": "node check-optional-dependencies.js",
     "start": "npx webpack serve --config ./.webpack/webpack.dev.js",
+    "start:docker": "npx webpack serve --config ./.webpack/webpack.dev.docker.js",
     "start:coverage": "npx webpack serve --config ./.webpack/webpack.coverage.js",
     "prepare": "npm run build:dist",
     "test:getopensource": "sh ./tests/git-opensource-tests.sh",
