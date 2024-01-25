@@ -20,12 +20,24 @@
  * at runtime from the About dialog for additional information.
  *****************************************************************************/
 
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { merge } from 'webpack-merge';
 import common from './webpack.common.js';
+import webpack from 'webpack';
+
+// Replicate __dirname functionality for ES modules
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const projectRootDir = path.resolve(__dirname, '..');
 
 /** @type {import('webpack').Configuration} */
 const prodConfig = {
+    context: projectRootDir,
     mode: 'production',
+    entry: {
+        'openmct-yamcs': path.resolve(projectRootDir, 'src/openmct-yamcs.js')
+    },
     devtool: 'source-map'
-}
+};
+
 export default merge(common, prodConfig);

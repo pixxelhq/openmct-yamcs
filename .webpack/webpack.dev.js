@@ -19,28 +19,33 @@
  * this source code distribution or the Licensing information page available
  * at runtime from the About dialog for additional information.
  *****************************************************************************/
+
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { merge } from 'webpack-merge';
 import commonConfig from './webpack.common.js';
+import webpack from 'webpack';
+import Dotenv from 'dotenv-webpack';
 
 // Replicate __dirname functionality for ES modules
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const projectRootDir = path.resolve(__dirname, '..');
 
 /** @type {import('webpack').Configuration} */
 const devConfig = {
+    context: projectRootDir,
     mode: 'development',
     devtool: 'eval-source-map',
     entry: {
-        'openmct-yamcs-example': './example/index.js'
+        'openmct-yamcs-example': path.resolve(projectRootDir, 'example/index.js')
     },
     devServer: {
         compress: true,
         port: 9000,
         static: [{
-            directory: path.join(__dirname, '../example'),
+            directory: path.join(projectRootDir, 'example')
         }, {
-            directory: path.join(__dirname, '../node_modules/openmct/dist'),
+            directory: path.join(projectRootDir, '/node_modules/openmct/dist'),
             publicPath: '/dist',
         }],
         proxy: {
@@ -59,11 +64,10 @@ const devConfig = {
             }
         }
     },
-    resolve: {
-        alias: {
-            openmct: path.resolve(__dirname, '../node_modules/openmct/dist/openmct.js')
-        }
-    }
+
+    plugins: [
+        new Dotenv()
+    ]
 };
 
 export default merge(commonConfig, devConfig);

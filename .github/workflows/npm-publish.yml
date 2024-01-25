@@ -1,0 +1,22 @@
+name: Create package on push to release branch
+
+on:
+  push:
+    branches: [ release ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.11.0'
+
+      - name: npm ci
+      - name: npm prepare
