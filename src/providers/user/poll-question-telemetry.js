@@ -20,6 +20,7 @@
  * at runtime from the About dialog for additional information.
  *****************************************************************************/
 import {
+    customFetch,
     idToQualifiedName
 } from '../../utils.js';
 
@@ -54,7 +55,7 @@ export default class PollQuestionTelemetry {
         let success = false;
 
         try {
-            const result = await fetch(setParameterUrl, {
+            const result = await customFetch(setParameterUrl, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'

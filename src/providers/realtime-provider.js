@@ -208,9 +208,14 @@ export default class RealtimeProvider {
             return;
         }
 
-        let wsUrl = `${this.url}`;
         this.lastSubscriptionId = 1;
         this.connected = false;
+
+        this.postConnect();
+    }
+
+    postConnect(access_token) {
+        let wsUrl = `${this.url}`;
         this.socket = new WebSocket(wsUrl);
 
         this.socket.onopen = () => {

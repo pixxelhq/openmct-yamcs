@@ -23,7 +23,8 @@ import {
     getValue,
     idToQualifiedName,
     qualifiedNameFromParameterId,
-    qualifiedNameToId
+    qualifiedNameToId,
+    customFetch
 } from '../utils.js';
 
 const BATCH_DEBOUNCE_MS = 100;
@@ -98,7 +99,7 @@ export default class LatestTelemetryProvider {
             fromCache: true
         };
 
-        const response = await fetch(this.#buildUrl(), {
+        const response = await customFetch(this.#buildUrl(), {
             method: 'POST',
             body: JSON.stringify(requestBody)
         });

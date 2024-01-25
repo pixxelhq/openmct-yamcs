@@ -22,6 +22,7 @@
 
 import createYamcsUser from './createYamcsUser.js';
 import { EventEmitter } from 'eventemitter3';
+import { customFetch } from '../../utils.js';
 
 export default class UserProvider extends EventEmitter {
     constructor(openmct, {userEndpoint, roleStatus, latestTelemetryProvider, realtimeTelemetryProvider, pollQuestionParameter, pollQuestionTelemetry}) {
@@ -187,7 +188,7 @@ export default class UserProvider extends EventEmitter {
 
     async #getUserInfo() {
         try {
-            const res = await fetch(this.userEndpoint);
+            const res = await customFetch(this.userEndpoint);
             const info = await res.json();
 
             this.user = new this.YamcsUser(info);

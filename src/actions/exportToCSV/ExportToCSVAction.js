@@ -20,7 +20,7 @@
  * at runtime from the About dialog for additional information.
  *****************************************************************************/
 import { OBJECT_TYPES } from "../../const.js";
-import {idToQualifiedName} from "../../utils.js";
+import { customFetch, idToQualifiedName } from "../../utils.js";
 import { saveAs } from 'file-saver';
 
 const SUPPORTED_TYPES = [OBJECT_TYPES.TELEMETRY_OBJECT_TYPE, OBJECT_TYPES.AGGREGATE_TELEMETRY_TYPE];
@@ -115,7 +115,7 @@ export default class ExportToCSVAction {
         url += `&parameters=${parameterIdsString}`;
         url += `&delimiter=COMMA`;
 
-        const response = await fetch(url);
+        const response = await customFetch(url);
         if (!response.ok) {
             return response.json();
         } else {

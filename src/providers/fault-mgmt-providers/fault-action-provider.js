@@ -1,3 +1,4 @@
+import { customFetch } from '../../utils.js';
 import { FAULT_MANAGEMENT_ALARMS, FAULT_MANAGEMENT_DEFAULT_SHELVE_DURATION } from './fault-mgmt-constants.js';
 
 export default class FaultActionProvider {
@@ -55,6 +56,6 @@ export default class FaultActionProvider {
     }
 
     _sendRequest(url, options) {
-        return fetch(url, options);
+        return customFetch(url, options);
     }
 }

@@ -190,7 +190,7 @@ export default class YamcsObjectProvider {
     }
 
     async #loadTelemetryDictionary() {
-        const operation = 'parameters?details=yes&limit=1000';
+        const operation = 'parameters?details=yes';
         const parameterUrl = this.url + 'api/mdb/' + this.instance + '/' + operation;
         const url = this.#getMdbUrl('space-systems');
         const spaceSystems = await accumulateResults(url, {}, 'spaceSystems', []);
@@ -370,15 +370,18 @@ export default class YamcsObjectProvider {
         }
 
         const isAggregate = this.#isAggregate(parameter);
+        const isCommandHistory = this.#isCommandHistory(parameter);
         let aggregateHasMembers = false;
 
-        if (this.limitOverrides[qualifiedName] !== undefined) {
-            obj.configuration.limits = this.limitOverrides[qualifiedName];
-        } else if (parameter.type.defaultAlarm) {
-            obj.configuration.limits = this.#convertToLimits(parameter.type.defaultAlarm);
+        if(!isCommandHistory) {
+            if (this.limitOverrides[qualifiedName] !== undefined) {
+                obj.configuration.limits = this.limitOverrides[qualifiedName];
+            } else if (parameter.type.defaultAlarm) {
+                obj.configuration.limits = this.#convertToLimits(parameter.type.defaultAlarm);
+            }
         }
 
-        if (!isAggregate) {
+        if (!isAggregate && !isCommandHistory) {
             const key = 'value';
             const telemetryValue = {
                 key,
@@ -476,6 +479,10 @@ export default class YamcsObjectProvider {
         return parameter?.type?.engType === 'aggregate';
     }
 
+    #isCommandHistory(parameter) {
+        return parameter?.dataSource === 'COMMAND' || parameter?.dataSource === 'COMMAND_HISTORY';
+    }
+
     #isImage(obj) {
         return (obj.type === OBJECT_TYPES.IMAGE_OBJECT_TYPE);
     }
@@ -540,6 +547,10 @@ export default class YamcsObjectProvider {
             if (parameter.alias[i].namespace === 'OpenMCT:type') {
                 return parameter.alias[i].name;
             }
+        }
+
+        if(this.#isCommandHistory(parameter)) {
+            return OBJECT_TYPES.COMMAND_HISTORY_TYPE;
         }
 
         if (this.#isAggregate(parameter) && this.#aggregateHasMembers(parameter)) {

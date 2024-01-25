@@ -30,7 +30,8 @@ export const OBJECT_TYPES = {
     OPERATOR_STATUS_TYPE: 'yamcs.operatorStatus',
     POLL_QUESTION_TYPE: 'yamcs.pollQuestion',
     ALARMS_TYPE: 'yamcs.alarms',
-    GLOBAL_STATUS_TYPE: 'yamcs.globalStatus'
+    GLOBAL_STATUS_TYPE: 'yamcs.globalStatus',
+    COMMAND_HISTORY_TYPE: 'yamcs.cmdHist'
 };
 export const MDB_TYPE = 'yamcs.mdbchanges';
 

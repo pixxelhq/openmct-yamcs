@@ -1,3 +1,4 @@
+import { customFetch } from '../../utils.js';
 import { FAULT_MANAGEMENT_ALARMS, FAULT_MANAGEMENT_TYPE } from './fault-mgmt-constants.js';
 
 export default class HistoricalFaultProvider {
@@ -15,7 +16,7 @@ export default class HistoricalFaultProvider {
     async request() {
         let url = `${this.url}api/processors/${this.instance}/${this.processor}/${FAULT_MANAGEMENT_ALARMS}`;
 
-        const res = await fetch(url);
+        const res = await customFetch(url);
         const faultsData = await res.json();
 
         return faultsData.alarms?.map(this.faultModelConverter);
